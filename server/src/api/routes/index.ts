@@ -10,7 +10,6 @@ import { env } from "../../config/env.ts";
 import { scheduler } from "../../jobs/scheduler.ts";
 import {
   checkProviderHealth,
-  isMockMode,
   SOURCE_PRIORITY,
 } from "../../providers/registry.ts";
 import { getProviderStates, failingProviders } from "../../ingestion/provider-stats.ts";
@@ -101,7 +100,7 @@ router.get("/health", async (_req, res) => {
     uptimeSeconds: Math.round(process.uptime()),
     version: env.COMPUTE_VERSION,
     environment: env.NODE_ENV,
-    mode: isMockMode() ? "mock" : "live",
+    mode: "live" as const,
     store: store.kind,
     database: {
       status: database.connected ? "healthy" : database.configured ? "unhealthy" : "not_configured",
@@ -575,7 +574,7 @@ router.get("/compute/status", async (_req, res) => {
 
   return ok(res, {
     ...status,
-    mode: isMockMode() ? "mock" : "live",
+    mode: "live" as const,
     processingTimeMs: status.lastRunDurationMs,
     lastIngestionAt: persisted.lastIngestionAt,
     lastComputationAt: persisted.lastComputationAt,

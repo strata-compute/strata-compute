@@ -10,7 +10,7 @@ import {
   ingestStocks,
 } from "../ingestion/jobs.ts";
 import { runPipeline } from "../pipeline.ts";
-import { isMockMode } from "../providers/registry.ts";
+
 import { logger } from "../utils/logger.ts";
 import { scheduler } from "./scheduler.ts";
 import type { Job } from "./types.ts";
@@ -29,16 +29,6 @@ import type { Job } from "./types.ts";
  */
 
 const seconds = (n: number) => n * 1000;
-
-export const mockPipelineJob: Job = {
-  name: "market-pipeline",
-  description: "Mock mode: ingest, compute, rank, detect signals, sync arena in one pass.",
-  intervalMs: env.JOB_INGESTION_INTERVAL_MS,
-  runOnStart: true,
-  async run() {
-    await runPipeline();
-  },
-};
 
 export const ingestStockTokensJob: Job = {
   name: "ingest-robinhood-stock-tokens",
@@ -143,12 +133,6 @@ export const arenaRoundJob: Job = {
 };
 
 export function registerJobs(): void {
-  if (isMockMode()) {
-    scheduler.register(mockPipelineJob);
-    scheduler.register(arenaRoundJob);
-    return;
-  }
-
   scheduler.register(ingestStockTokensJob);
   scheduler.register(ingestCryptoJob);
   scheduler.register(ingestStocksJob);

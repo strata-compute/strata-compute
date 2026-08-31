@@ -5,7 +5,7 @@ import { closePool } from "./database/pool.ts";
 import { registerJobs, startJobs } from "./jobs/definitions.ts";
 import { scheduler } from "./jobs/scheduler.ts";
 import { runPipeline } from "./pipeline.ts";
-import { getMarketProvider, isMockMode } from "./providers/registry.ts";
+import { getMarketProvider } from "./providers/registry.ts";
 import {
   ingestCryptoMarkets,
   ingestRobinhoodChain,
@@ -126,37 +126,28 @@ async function main() {
 
   // Refresh the read model. Every step is independently failable — a provider
   // outage at boot must not stop the service from serving what it already has.
-  if (isMockMode()) {
-    const first = await runPipeline();
-    if (!first.ok) {
-      logger.warn("initial pipeline pass failed — API will serve empty results", {
-        job: "startup",
-      });
-    }
-  } else {
-    // fast providers only: Alpha Vantage has a 25/day budget and is left to
-    // its own scheduled job rather than being spent at every restart
-    const results = await Promise.allSettled([
-      ingestRobinhoodStockTokens(),
-      ingestCryptoMarkets(),
-      ingestRobinhoodChain(),
-    ]);
+  // fast providers only: Alpha Vantage has a 25/day budget and is left to its
+  // own scheduled job rather than being spent at every restart
+  const results = await Promise.allSettled([
+    ingestRobinhoodStockTokens(),
+    ingestCryptoMarkets(),
+    ingestRobinhoodChain(),
+  ]);
 
-    const failed = results.filter(
-      (r) => r.status === "rejected" || (r.status === "fulfilled" && !r.value.ok),
-    ).length;
-    if (failed > 0) {
-      logger.warn("some providers failed during startup ingestion", {
-        job: "startup",
-        failed,
-        total: results.length,
-      });
-    }
+  const failed = results.filter(
+    (r) => r.status === "rejected" || (r.status === "fulfilled" && !r.value.ok),
+  ).length;
+  if (failed > 0) {
+    logger.warn("some providers failed during startup ingestion", {
+      job: "startup",
+      failed,
+      total: results.length,
+    });
+  }
 
-    const first = await runPipeline({ skipIngestion: true });
-    if (!first.ok) {
-      logger.warn("initial compute pass failed", { job: "startup" });
-    }
+  const first = await runPipeline({ skipIngestion: true });
+  if (!first.ok) {
+    logger.warn("initial compute pass failed", { job: "startup" });
   }
 
   registerJobs();

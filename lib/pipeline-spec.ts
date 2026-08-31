@@ -4,9 +4,14 @@ import type { PipelineStage, ScoreFactorMeta } from '@/lib/types';
  * METHODOLOGY, NOT MARKET DATA.
  *
  * These are the documented stages, modules and factor weights of the Strata
- * computation pipeline — the same values the backend publishes on
- * /api/compute/status. They describe how the score is produced; they contain
+ * computation pipeline. They describe how the score is produced; they contain
  * no prices, volumes, scores or any other market figure.
+ *
+ * They also contain no operational measurements. Throughput, latency and
+ * subsystem health used to live here as constants, which made a methodology
+ * file into a source of numbers that looked measured and were not. Anything
+ * countable now comes from /api/compute/status and /api/health at request
+ * time.
  */
 
 export const SCORE_FACTORS: ScoreFactorMeta[] = [
@@ -52,8 +57,6 @@ export const PIPELINE_STAGES: PipelineStage[] = [
     id: "sources",
     label: "Data Sources",
     kind: "source",
-    throughput: "41 venues",
-    latency: "—",
     description:
       "Market, stock, crypto and onchain feeds are ingested continuously and stamped at the venue clock.",
     detail: [
@@ -67,8 +70,6 @@ export const PIPELINE_STAGES: PipelineStage[] = [
     id: "normalization",
     label: "Normalization",
     kind: "process",
-    throughput: "2.4M rec/min",
-    latency: "38ms p50",
     description:
       "Heterogeneous feeds are resolved onto one symbology, one clock and one unit system before any maths runs.",
     detail: [
@@ -82,8 +83,6 @@ export const PIPELINE_STAGES: PipelineStage[] = [
     id: "computation",
     label: "Computation",
     kind: "process",
-    throughput: "5 modules",
-    latency: "120ms p50",
     description:
       "Five independent modules score every market on the same normalised inputs. Modules never read each other.",
     detail: [
@@ -98,8 +97,6 @@ export const PIPELINE_STAGES: PipelineStage[] = [
     id: "score",
     label: "Strata Score",
     kind: "output",
-    throughput: "0–100",
-    latency: "1s cadence",
     description:
       "Module outputs are weighted into a single composite that is comparable across stocks, crypto and onchain markets.",
     detail: [
@@ -112,8 +109,6 @@ export const PIPELINE_STAGES: PipelineStage[] = [
     id: "rankings",
     label: "Rankings",
     kind: "output",
-    throughput: "12,486 assets",
-    latency: "1s cadence",
     description:
       "Scores resolve into ordered views — rankings, arena rounds and the signal feed.",
     detail: [
@@ -183,11 +178,11 @@ export const COMPUTE_MODULES = [
   },
 ] as const;
 
-export const PLATFORM_STATUS = [
-  { id: "ingest", label: "Ingestion", state: "operational", detail: "41/41 venues connected", latency: "38ms" },
-  { id: "normalize", label: "Normalization", state: "operational", detail: "2.4M records/min", latency: "22ms" },
-  { id: "compute", label: "Compute", state: "operational", detail: "5/5 modules healthy", latency: "120ms" },
-  { id: "scoring", label: "Scoring", state: "operational", detail: "1s cadence held", latency: "84ms" },
-  { id: "onchain", label: "Onchain indexer", state: "degraded", detail: "Base backfill running 2 blocks behind", latency: "1.4s" },
-  { id: "api", label: "Public API", state: "operational", detail: "p99 under 200ms", latency: "61ms" },
-] as const;
+/**
+ * PLATFORM_STATUS was removed.
+ *
+ * It hardcoded subsystem health — "41/41 venues connected", "5/5 modules
+ * healthy", and an onchain indexer specifically "running 2 blocks behind" —
+ * none of it measured. Real pipeline health is served by /api/health and
+ * rendered on /status, which reports what the providers actually said.
+ */

@@ -161,8 +161,13 @@ export interface PipelineStage {
   id: string;
   label: string;
   kind: "source" | "process" | "output";
-  throughput: string;
-  latency: string;
+  /**
+   * Optional because most stages have no measured figure to show. They were
+   * previously filled with invented ones, which is worse than an empty slot:
+   * a number on a diagram reads as a measurement.
+   */
+  throughput?: string;
+  latency?: string;
   description: string;
   detail: string[];
 }

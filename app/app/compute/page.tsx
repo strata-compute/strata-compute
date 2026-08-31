@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { PIPELINE_STAGES } from "@/lib/pipeline-spec";
+import { PIPELINE_STAGES, SCORE_FACTORS } from "@/lib/pipeline-spec";
+import type { ApiComputeStatus } from "@/lib/api";
 import {
+  loadComputeStatus,
   loadMarket,
   loadMarketIntelligence,
   loadMarkets,
@@ -71,12 +73,46 @@ const SOURCES = [
   },
 ];
 
-const GUARANTEES = [
-  { label: "Cadence", value: "1s", detail: "Every covered market recomputes each second." },
-  { label: "End-to-end latency", value: "260ms p50", detail: "Venue timestamp to published score." },
-  { label: "Determinism", value: "Replayable", detail: "Same inputs and weights reproduce the same score." },
-  { label: "Attribution", value: "Retained", detail: "Every computation keeps its full factor breakdown." },
-];
+/**
+ * What the engine guarantees, measured where it can be.
+ *
+ * Two of these were invented: a "1s" cadence against a job that runs every
+ * sixty seconds, and a "260ms p50" latency against a pass that takes about
+ * twenty-five. Both now come from /api/compute/status, and read "—" when the
+ * backend cannot say. The remaining two are properties of the engine rather
+ * than measurements, and were already true.
+ */
+function guarantees(status: ApiComputeStatus | null) {
+  const computeJob = status?.jobs?.find((job) => job.name.includes("compute"));
+  const cadence = computeJob ? `${Math.round(computeJob.intervalMs / 1000)}s` : "—";
+  const pass =
+    typeof status?.processingTimeMs === "number"
+      ? `${(status.processingTimeMs / 1000).toFixed(1)}s`
+      : "—";
+
+  return [
+    {
+      label: "Cadence",
+      value: cadence,
+      detail: "How often every covered market is recomputed.",
+    },
+    {
+      label: "Last pass",
+      value: pass,
+      detail: "Wall-clock time of the most recent computation across all markets.",
+    },
+    {
+      label: "Determinism",
+      value: "Replayable",
+      detail: "Same inputs and weights reproduce the same score.",
+    },
+    {
+      label: "Attribution",
+      value: "Retained",
+      detail: "Every computation keeps its full factor breakdown.",
+    },
+  ];
+}
 
 export default async function ComputePage() {
   // the worked example uses whichever market the engine actually scored
@@ -87,10 +123,11 @@ export default async function ComputePage() {
 
   // The worked example is computed from a real scored market, using the
   // weights the engine publishes rather than a copy held here.
-  const [workedScore, scoringVersion, marketIntelligence] = await Promise.all([
+  const [workedScore, scoringVersion, marketIntelligence, computeStatus] = await Promise.all([
     top ? loadScore(top.symbol) : Promise.resolve({ data: null } as const),
     loadScoringVersion(),
     loadMarketIntelligence(),
+    loadComputeStatus(),
   ]);
 
   const intel = marketIntelligence.data;
@@ -138,7 +175,7 @@ export default async function ComputePage() {
         }
         aside={
           <div className="flex h-full flex-col justify-center gap-4 rounded-lg border border-border bg-bg/60 p-5">
-            {GUARANTEES.map((item) => (
+            {guarantees(computeStatus.data).map((item) => (
               <div key={item.label} className="border-b border-border pb-3 last:border-b-0 last:pb-0">
                 <div className="flex items-baseline justify-between gap-3">
                   <span className="text-[10.5px] uppercase tracking-[0.14em] text-faint">
@@ -371,8 +408,8 @@ export default async function ComputePage() {
           ))}
         </div>
         <p className="font-mono text-[11px] text-faint">
-          {PIPELINE_STAGES.length} stages · 5 modules · 1s cadence · phase 1
-          preview renders synthetic figures
+          {PIPELINE_STAGES.length} stages · {SCORE_FACTORS.length} modules ·
+          every figure on this page is read from the engine
         </p>
       </section>
     </div>

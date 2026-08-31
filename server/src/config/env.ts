@@ -106,20 +106,14 @@ const schema = z.object({
   DATABASE_SSL: bool.default(false),
 
   /**
-   * The data contract for the whole service.
+   * There is no data-source switch.
    *
-   *   live  real providers only. If a credential is missing the capability is
-   *         disabled and reported — it is never replaced with synthetic data.
-   *   mock  the synthetic development provider. Must be asked for explicitly,
-   *         is refused under NODE_ENV=production, and marks every record it
-   *         produces `isMock: true` all the way to the API response.
-   *
-   * Default is `live`: a misconfigured service must fail loudly, not quietly
-   * serve invented numbers.
+   * This used to be DATA_MODE, with a synthetic provider behind `mock` and a
+   * startup guard refusing it under NODE_ENV=production. Both are gone: the
+   * generator was deleted, so there is nothing left to select and nothing left
+   * to guard against. Real providers or no data — the service has no third
+   * behaviour to configure.
    */
-  DATA_MODE: z.enum(["live", "mock"]).default("live"),
-  /** Deprecated alias, kept so an existing .env keeps working. */
-  MARKET_PROVIDER: z.enum(["mock", "live"]).optional(),
 
   /**
    * Provider credentials. Declared so configuration is validated and typed in
@@ -224,16 +218,8 @@ if (!parsed.success) {
 
 const raw = parsed.data;
 
-/**
- * DATA_MODE wins; MARKET_PROVIDER is honoured only as a legacy alias so an
- * older .env does not silently change behaviour.
- */
-const dataMode = raw.DATA_MODE ?? raw.MARKET_PROVIDER ?? "live";
-
 export const env = Object.freeze({
   ...raw,
-  DATA_MODE: process.env.DATA_MODE ? raw.DATA_MODE : (raw.MARKET_PROVIDER ?? raw.DATA_MODE),
-  dataMode,
   // the spec names this GOPLUS_API_KEY; the API itself calls it an app key
   GOPLUS_APP_KEY: raw.GOPLUS_APP_KEY ?? raw.GOPLUS_API_KEY,
   corsOrigins: raw.CORS_ORIGINS.split(",")

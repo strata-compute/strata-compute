@@ -85,13 +85,6 @@ export function describeCapabilities(): CapabilityReport[] {
 export function validateStartupConfiguration(): CapabilityReport[] {
   const problems: string[] = [];
 
-  if (env.isProduction && env.dataMode !== "live") {
-    problems.push(
-      `NODE_ENV=production requires DATA_MODE=live (got '${env.dataMode}'). ` +
-        "Synthetic market data must never reach production.",
-    );
-  }
-
   if (env.isProduction) {
     if (env.corsOrigins.includes("*")) {
       problems.push(
@@ -129,7 +122,7 @@ export function validateStartupConfiguration(): CapabilityReport[] {
 
   const capabilities = describeCapabilities();
 
-  if (env.dataMode === "live") {
+  {
     // a market source is the minimum: without one there is nothing to serve
     const marketSources = capabilities.filter(
       (c) => c.capability === "crypto_markets" || c.capability === "stock_tokens",
@@ -151,17 +144,10 @@ export function validateStartupConfiguration(): CapabilityReport[] {
     }
   }
 
-  if (env.dataMode === "mock") {
-    logger.warn(
-      "DATA_MODE=mock — every record is synthetic and flagged isMock; never use this outside development",
-      { mode: "mock" },
-    );
-  }
-
   if (problems.length > 0) throw new ConfigurationError(problems);
 
   logger.info("configuration validated", {
-    mode: env.dataMode,
+    mode: "live",
     capabilities: capabilities.filter((c) => c.configured).map((c) => c.capability),
     disabled: capabilities.filter((c) => !c.configured).map((c) => c.capability),
   });

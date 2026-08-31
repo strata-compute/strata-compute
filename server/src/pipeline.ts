@@ -13,7 +13,6 @@ import {
   detectEarlyMovers,
   type EarlyMoverInput,
 } from "./intelligence/market.ts";
-import { isMockMode } from "./providers/registry.ts";
 import { runIntelligenceDetection } from "./intelligence/pass.ts";
 import { rankAssets, toRankMap } from "./rankings/service.ts";
 import type { RankableAsset } from "./rankings/service.ts";
@@ -281,10 +280,10 @@ export async function runPipeline(options: PipelineOptions = {}): Promise<Pipeli
   try {
     const store = getStore();
 
-    if (!options.skipIngestion && isMockMode()) {
-      await runIngestion();
-      markIngestion();
-    }
+    // Ingestion does not run from here. Each real provider has its own
+    // scheduled job with its own cadence and rate budget; the inline pass this
+    // replaces existed for the synthetic provider, which could be re-read as
+    // often as it was asked. A compute pass now reads what ingestion stored.
 
     await hydratePreviousFromStore();
 

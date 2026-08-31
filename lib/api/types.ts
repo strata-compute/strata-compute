@@ -167,8 +167,30 @@ export interface ApiComputeStatus {
   eventsLast24h: number;
   failures: number;
   provider: string;
+  /**
+   * Structurally false. The synthetic provider that was the only thing able to
+   * set it true has been removed; the flag survives as provenance on records
+   * already persisted, and on the wire so older stored payloads still parse.
+   */
   usingMockData: boolean;
   weights: Record<string, number>;
+  /**
+   * Scheduler state, as the API has always sent it — the type simply did not
+   * declare it. This is where the real computation cadence comes from, in
+   * place of the constant the Compute page used to print.
+   */
+  jobs?: ApiJobState[];
+}
+
+export interface ApiJobState {
+  name: string;
+  intervalMs: number;
+  running: boolean;
+  lastRunAt: string | null;
+  lastDurationMs: number | null;
+  lastError: string | null;
+  runCount: number;
+  failureCount: number;
 }
 
 export interface ApiHealth {

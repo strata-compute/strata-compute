@@ -7,7 +7,6 @@ import { AlphaVantageProvider } from "./alphavantage/alphavantage-provider.ts";
 import { BlockscoutProvider } from "./blockscout/blockscout-provider.ts";
 import { CoinGeckoProvider } from "./coingecko/coingecko-provider.ts";
 import { GoPlusProvider } from "./goplus/goplus-provider.ts";
-import { MockMarketProvider } from "./mock/mock-market-provider.ts";
 import { RobinhoodStockTokenProvider } from "./robinhood/robinhood-stock-token-provider.ts";
 import type {
   ChainDataProvider,
@@ -54,33 +53,11 @@ interface Registry {
   chain: AlchemyChainProvider | null;
   onchainIndex: BlockscoutProvider | null;
   security: GoPlusProvider | null;
-  mock: MockMarketProvider | null;
 }
 
 let registry: Registry | null = null;
 
 function build(): Registry {
-  const useMock = env.dataMode === "mock";
-
-  if (useMock) {
-    // reached only when DATA_MODE=mock was set explicitly and startup
-    // validation allowed it (never under NODE_ENV=production)
-    logger.warn("provider registry: MOCK MODE — all data is synthetic", {
-      provider: "mock",
-    });
-    const mock = new MockMarketProvider();
-    return {
-      market: mock,
-      crypto: null,
-      stocks: null,
-      stockTokens: null,
-      chain: null,
-      onchainIndex: null,
-      security: null,
-      mock,
-    };
-  }
-
   // Each provider is optional: a missing credential disables that capability
   // rather than preventing the service from starting.
   const crypto = new CoinGeckoProvider(env.COINGECKO_API_KEY);
@@ -129,7 +106,6 @@ function build(): Registry {
     chain,
     onchainIndex,
     security,
-    mock: null,
   };
 }
 
@@ -170,10 +146,6 @@ export function getSecurityProvider(): SecurityDataProvider | null {
   return get().security;
 }
 
-export function isMockMode(): boolean {
-  return get().mock !== null;
-}
-
 export function getProviderFor(assetType: AssetType): MarketDataProvider {
   const provider = getMarketProvider();
   if (!provider.supports.includes(assetType)) {
@@ -192,7 +164,6 @@ interface HealthCheckable {
 function checkables(): HealthCheckable[] {
   const r = get();
   const all: (HealthCheckable | null)[] = [
-    r.mock,
     r.stockTokens,
     r.chain,
     r.crypto,
