@@ -1,0 +1,36 @@
+{
+  "name": "strata-compute-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.6"
+  },
+  "scripts": {
+    "dev": "node --watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "migrate": "node src/database/migrate.ts",
+    "test": "node --test \"test/*.test.ts\"",
+    "test:watch": "node --test --watch \"test/*.test.ts\"",
+    "calibrate:replay": "node scripts/calibration-replay.ts",
+    "verify:schema": "node scripts/verify-schema.ts",
+    "validate:score": "node scripts/validate-score.ts",
+    "validate:confidence": "node scripts/confidence-compare.ts",
+    "replay:intelligence": "node scripts/intelligence-replay.ts",
+    "verify:database": "node scripts/verify-database.ts",
+    "verify:intelligence": "node scripts/verify-intelligence.ts"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.7.0",
+    "@types/pg": "^8.15.5",
+    "typescript": "^5.9.3"
+  }
+}

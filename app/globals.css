@@ -1,0 +1,336 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   STRATA COMPUTE — design tokens
+   90% dark / 8% neutral / 2% green accent
+   ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------
+   THEME LAYER
+
+   Every colour in the product resolves through one of the semantic tokens
+   below. Components never name a literal colour, which is what makes a
+   second theme possible without touching them.
+
+   Dark is the default and is what the server renders. The inline script in
+   app/layout.tsx resolves a stored preference (dark | light | system) to a
+   concrete data-theme before first paint, so there is no flash and no
+   media query is consulted for the default — an absent preference is dark,
+   not "whatever the OS wants".
+   ------------------------------------------------------------------ */
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* surfaces */
+  --strata-bg: #080a09;
+  --strata-surface: #101412;
+  --strata-surface-2: #151a17;
+  --strata-elevated: #1a211c;
+  --strata-border: #202621;
+  --strata-border-strong: #2b332d;
+
+  /* type */
+  --strata-text: #f2f5f3;
+  --strata-muted: #8a938d;
+  --strata-faint: #5b635e;
+
+  /* accent — the brand lime. Very high luminance against near-black, so it
+     is used sparingly and always carries dark text when used as a fill. */
+  --strata-green: #ccff00;
+  --strata-green-bright: #ddff4d;
+  /* text/icons drawn ON a green fill */
+  --strata-on-accent: #0b1004;
+  /* Green applied AS ink — text, hairline strokes, small status dots.
+     Against near-black the lime is already the most legible thing on the
+     page, so in this theme the two are the same colour. */
+  --strata-green-ink: #ccff00;
+
+  /* signal semantics */
+  --strata-red: #ff4b4b;
+  --strata-amber: #e5a50a;
+  --strata-blue: #4c8dff;
+
+  /* modal scrim */
+  --strata-scrim: rgb(0 0 0 / 0.7);
+  /* neutral fill behind asset artwork, so transparent logos stay legible */
+  --strata-logo-bg: #ffffff;
+  --strata-logo-blend: normal;
+}
+
+/* ------------------------------------------------------------------
+   LIGHT
+
+   Not an inversion. The dark theme earns contrast by making surfaces
+   recede; the light theme earns it by making surfaces advance — white
+   cards lifted off a warm-grey ground by a hairline border rather than a
+   shadow, which keeps the same flat, instrument-panel character.
+
+   The accent changes value, not identity: lime at 94% luminance is
+   unreadable on white, so light uses a deep green of the same family and
+   flips on-accent text to white.
+   ------------------------------------------------------------------ */
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --strata-bg: #f7f8f7;
+  --strata-surface: #ffffff;
+  --strata-surface-2: #f1f3f1;
+  --strata-elevated: #ffffff;
+  --strata-border: #e1e5e2;
+  --strata-border-strong: #c9d0cb;
+
+  --strata-text: #101311;
+  --strata-muted: #66706a;
+  --strata-faint: #949d97;
+
+  /* The accent is the SAME lime as the dark theme. Anywhere green is a
+     fill — buttons, badges, bars, the active tab — light and dark are the
+     identical colour, which is what makes the two themes read as one brand. */
+  --strata-green: #ccff00;
+  --strata-green-bright: #ddff4d;
+  --strata-on-accent: #0b1004;
+
+  /* Ink is the one place the value has to move. #ccff00 on white measures
+     1.18:1 — not dim, genuinely unreadable — so green text, hairlines and
+     status dots use the same hue (72°) taken down to 4.88:1 on white. It is
+     the same lime, darkened only as far as legibility requires. */
+  --strata-green-ink: #627a00;
+
+  --strata-red: #d92d20;
+  --strata-amber: #b45309;
+  --strata-blue: #2563eb;
+
+  --strata-scrim: rgb(16 19 17 / 0.45);
+  --strata-logo-bg: #f4f6f4;
+  --strata-logo-blend: normal;
+}
+
+@theme inline {
+  --color-bg: var(--strata-bg);
+  --color-surface: var(--strata-surface);
+  --color-surface-2: var(--strata-surface-2);
+  --color-elevated: var(--strata-elevated);
+  --color-border: var(--strata-border);
+  --color-border-strong: var(--strata-border-strong);
+
+  --color-text: var(--strata-text);
+  --color-muted: var(--strata-muted);
+  --color-faint: var(--strata-faint);
+
+  --color-green: var(--strata-green);
+  --color-green-bright: var(--strata-green-bright);
+  --color-green-ink: var(--strata-green-ink);
+  --color-on-accent: var(--strata-on-accent);
+
+  --color-red: var(--strata-red);
+  --color-amber: var(--strata-amber);
+  --color-blue: var(--strata-blue);
+
+  --color-scrim: var(--strata-scrim);
+  --color-logo-bg: var(--strata-logo-bg);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-mono-src), ui-monospace, "SF Mono", "JetBrains Mono",
+    "Cascadia Mono", Menlo, monospace;
+
+  --animate-live-pulse: live-pulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-enter: enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-rise: rise 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+  --animate-flash-up: flash-up 1s ease-out;
+  --animate-flash-down: flash-down 1s ease-out;
+  --animate-sweep: sweep 3.2s linear infinite;
+  --animate-draw: draw 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-ticker: ticker 48s linear infinite;
+  --animate-ticker-fast: ticker 32s linear infinite;
+  --animate-flow: flow 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  --animate-scan: scan 2.6s ease-in-out infinite;
+}
+
+/* Theme changes are instant by default; this softens the switch without
+   animating every hover transition on the page. */
+:root[data-theme-animating] *,
+:root[data-theme-animating] *::before,
+:root[data-theme-animating] *::after {
+  transition: background-color 180ms ease, border-color 180ms ease,
+    color 180ms ease, fill 180ms ease, stroke 180ms ease !important;
+  transition-delay: 0ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme-animating] *,
+  :root[data-theme-animating] *::before,
+  :root[data-theme-animating] *::after {
+    transition: none !important;
+  }
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.82); }
+}
+@keyframes enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0% { opacity: 0.35; }
+  50% { opacity: 0.75; }
+  100% { opacity: 0.35; }
+}
+@keyframes flash-up {
+  0% { background-color: color-mix(in oklab, var(--color-green-ink) 16%, transparent); }
+  100% { background-color: transparent; }
+}
+@keyframes flash-down {
+  0% { background-color: color-mix(in oklab, var(--color-red) 14%, transparent); }
+  100% { background-color: transparent; }
+}
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* a packet travelling the full length of its rail — the wrapper is
+   full-size, so translating it by 100% covers the whole connector */
+@keyframes flow {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translate3d(var(--flow-x, 100%), var(--flow-y, 0), 0); opacity: 0; }
+}
+@keyframes scan {
+  0%, 100% { transform: scaleX(0.18); opacity: 0.35; }
+  50% { transform: scaleX(1); opacity: 0.9; }
+}
+
+/* ------------------------------------------------------------------ */
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-green-ink) 26%, transparent);
+    color: var(--color-text);
+  }
+
+  :focus-visible {
+    outline: 1px solid color-mix(in oklab, var(--color-green-ink) 70%, transparent);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border: 3px solid var(--color-bg);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+  }
+
+  /* numeric data is always tabular */
+  .tnum,
+  table td,
+  table th {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@utility grid-lines {
+  background-image: linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-border) 55%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-border) 55%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 44px 44px;
+}
+
+@utility hairline-t {
+  box-shadow: inset 0 1px 0 0 var(--color-border);
+}
+
+/* scroll reveal — see components/landing/reveal.tsx */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* bars that fill when their section scrolls into view, without needing a
+   client component to hold the state */
+[data-reveal] .grow-bar {
+  width: 0;
+  transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--reveal-delay, 0ms) + 120ms);
+}
+[data-reveal="in"] .grow-bar {
+  width: var(--bar-w, 0%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+  [data-reveal] .grow-bar {
+    width: var(--bar-w, 0%);
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

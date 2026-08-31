@@ -1,0 +1,16 @@
+# dependencies
+node_modules
+
+# build output
+dist
+*.tsbuildinfo
+
+# environment — templates only; see the note in the root .gitignore
+.env
+.env.*
+!.env.example
+
+# logs and coverage
+logs
+*.log
+coverage

@@ -1,0 +1,31 @@
+# dependencies
+node_modules
+
+# build output
+.next
+out
+dist
+next-env.d.ts
+*.tsbuildinfo
+
+# environment
+#
+# Every variant is ignored and only the template is tracked. The negation must
+# stay below the wildcard: git applies the last matching rule, so `.env.*`
+# listed after `!.env.example` would silently re-ignore the template and the
+# repository would carry no example at all.
+.env
+.env.*
+!.env.example
+
+# logs and coverage
+logs
+*.log
+npm-debug.log*
+coverage
+
+# editor and OS noise
+.DS_Store
+Thumbs.db
+.vscode
+.idea
