@@ -92,10 +92,17 @@ const schema = z.object({
    * for the pass and the API to coexist while staying well inside what a
    * managed pooler allocates per client.
    *
-   * Raise it only alongside the database plan's own connection ceiling: a
-   * pool larger than the server allows fails later and less clearly.
+   * The ceiling is not ours to choose. Supabase's session pooler allows 15
+   * clients in total, and a pool of 20 does not fail at startup — it fails
+   * later, as `EMAXCONNSESSION` on whichever request happens to be unlucky,
+   * which reads like an application bug rather than a capacity limit. Twenty
+   * was set here during a local audit without checking that number, and
+   * production found it within minutes.
+   *
+   * Twelve leaves headroom for migrations and a manual session. Raise it only
+   * after raising the database plan's own limit, never before.
    */
-  DATABASE_POOL_MAX: z.coerce.number().int().positive().default(20),
+  DATABASE_POOL_MAX: z.coerce.number().int().positive().default(12),
   DATABASE_SSL: bool.default(false),
 
   /**

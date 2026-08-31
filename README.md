@@ -185,7 +185,7 @@ scheduler runs inside the backend process and the cache is in-memory.
 | `DATABASE_URL` | Supabase **session pooler** (port 5432), not the direct host — the direct host is IPv6-only. Percent-encode reserved characters in the password. |
 | `DATABASE_SSL` | `true` for any managed Postgres. |
 | `DATABASE_CA_CERT` | Optional PEM path. Without it the connection is encrypted but the server is unauthenticated. |
-| `DATABASE_POOL_MAX` | Per instance. Must stay inside the database plan's own connection ceiling. |
+| `DATABASE_POOL_MAX` | Per instance, and must stay below the database's own client ceiling — Supabase's session pooler allows **15 in total**. Exceeding it does not fail at startup; it surfaces later as `EMAXCONNSESSION` on random requests. Default 12. |
 | `DATA_STORE` | `postgres`. `memory` is refused under `NODE_ENV=production`. |
 | `DATA_MODE` | `live`. Anything else is refused under `NODE_ENV=production`. |
 | `CORS_ORIGINS` | The frontend origin. **Required** in production; `*` is refused. |
