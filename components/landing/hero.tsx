@@ -38,14 +38,14 @@ export function Hero({
       <div className="relative mx-auto w-full max-w-[1240px] px-5 pb-20 pt-28 sm:px-8 lg:pb-24 lg:pt-32">
         {/* the statement gets the full measure — no column can hold it */}
         <Reveal>
-          <Eyebrow>Computation layer</Eyebrow>
+          <Eyebrow>Computation layer · Built on Robinhood Chain</Eyebrow>
         </Reveal>
 
         <Reveal delay={80}>
           <h1 className="mt-6 text-[clamp(32px,6.6vw,72px)] font-semibold uppercase leading-[0.96] tracking-[-0.038em] text-text">
-            One computation layer.
+            Every market
             <br />
-            Every market.
+            on one scale.
           </h1>
         </Reveal>
 
@@ -53,16 +53,19 @@ export function Hero({
           <div>
             <Reveal delay={160}>
               <p className="max-w-xl text-[15.5px] leading-relaxed text-muted">
-                Strata Compute turns fragmented market, stock, crypto and
-                onchain data into one comparable intelligence layer.
+                Tokenised equities, crypto and onchain markets arrive
+                measured differently and settled on different clocks. Strata
+                normalises them onto one schema, computes seven independent
+                components against each market&rsquo;s own history, and
+                resolves them into a single comparable measure of strength.
               </p>
             </Reveal>
 
             <Reveal delay={240}>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Button asChild variant="primary" className="h-12 px-6 text-[14.5px]">
-                  <Link href={routes.app}>
-                    Launch App
+                  <Link href={routes.terminal}>
+                    Open Terminal
                     <ArrowRight className="size-4" />
                   </Link>
                 </Button>

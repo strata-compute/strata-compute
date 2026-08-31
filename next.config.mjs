@@ -87,8 +87,14 @@ const nextConfig = {
 
   async redirects() {
     return [
-      // "Launch App" points at /app; the console opens on its overview
-      { source: "/app", destination: "/app/overview", permanent: false },
+      // The Terminal opens on its overview.
+      { source: "/terminal", destination: "/terminal/overview", permanent: false },
+
+      // The product moved from /app to /terminal. These keep every link that
+      // was ever shared or bookmarked working, and they are permanent because
+      // the old location is not coming back.
+      { source: "/app", destination: "/terminal/overview", permanent: true },
+      { source: "/app/:path*", destination: "/terminal/:path*", permanent: true },
     ];
   },
 };

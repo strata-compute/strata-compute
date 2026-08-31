@@ -7,6 +7,7 @@ import { PRIMARY_NAV, SECONDARY_NAV, type NavItem } from "@/lib/nav";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/layout/logo";
+import { ArrowLeft } from "lucide-react";
 import { ComputeHeartbeat } from "@/components/layout/live-indicator";
 
 function useIsActive() {
@@ -107,6 +108,20 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             />
           ))}
         </nav>
+        {/* Explicit rather than implied: the sidebar logo goes to the
+            overview, so without this there is no obvious exit from the
+            product back to the public site. */}
+        <Link
+          href={routes.landing}
+          onClick={onNavigate}
+          className="group flex items-center gap-2 rounded-md px-2.5 py-2 text-[13px] text-muted transition-colors hover:bg-surface/70 hover:text-text"
+        >
+          <ArrowLeft
+            className="size-4 text-faint transition-colors group-hover:text-muted"
+            strokeWidth={1.75}
+          />
+          Back to home
+        </Link>
         <ComputeHeartbeat />
       </div>
     </div>

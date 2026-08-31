@@ -16,13 +16,40 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
+/**
+ * `metadataBase` is what makes every relative Open Graph and canonical URL
+ * resolve to the real origin instead of the deployment's own hostname, which
+ * changes on every build.
+ */
 export const metadata: Metadata = {
+  metadataBase: new URL("https://stratacompute.app"),
   title: {
-    default: "Strata Compute — One computation layer. Every market.",
+    default: "Strata Compute — Every market on one scale",
     template: "%s · Strata Compute",
   },
   description:
-    "Strata Compute turns fragmented market, stock, crypto and onchain data into one comparable intelligence layer.",
+    "A computation and intelligence layer for tokenised equities, crypto and onchain markets. Seven components, published weights, one comparable measure of strength. Built on Robinhood Chain.",
+  applicationName: "Strata Compute",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: "Strata Compute",
+    url: "https://stratacompute.app",
+    title: "Strata Compute — Every market on one scale",
+    description:
+      "Tokenised equities, crypto and onchain markets normalised onto one schema and computed into one comparable measure of strength. Built on Robinhood Chain.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Strata Compute — Every market on one scale",
+    description:
+      "A computation and intelligence layer for tokenised equities, crypto and onchain markets.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
 };
 
 export const viewport: Viewport = {
@@ -35,8 +62,8 @@ export const viewport: Viewport = {
 
 /**
  * Root shell only owns the document, fonts and tokens. The two products get
- * their own chrome: `app/(marketing)` for the public site, `app/app` for the
- * console.
+ * their own chrome: `app/(marketing)` for the public site, `app/terminal` for
+ * the Terminal.
  */
 export default function RootLayout({
   children,

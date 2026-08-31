@@ -59,7 +59,7 @@ export const PIPELINE: PipelineStage[] = [
   {
     id: "compute",
     label: "COMPUTE",
-    caption: "Five independent modules",
+    caption: "Seven independent components",
     items: ["MOMENTUM", "VOLUME", "ACTIVITY", "LIQUIDITY", "STRENGTH"],
   },
   {

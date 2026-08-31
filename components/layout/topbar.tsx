@@ -29,7 +29,14 @@ function Breadcrumb() {
       aria-label="Breadcrumb"
       className="flex min-w-0 items-center gap-1.5 text-[13px]"
     >
-      <span className="hidden text-faint sm:inline">Strata</span>
+      {/* The breadcrumb root is the way back to the public site. A crumb that
+          is not a link is decoration; this one goes home. */}
+      <Link
+        href={routes.landing}
+        className="hidden text-faint transition-colors hover:text-text sm:inline"
+      >
+        Strata
+      </Link>
       <ChevronRight className="hidden size-3.5 text-border-strong sm:inline" />
       {detail ? (
         <>
@@ -78,7 +85,7 @@ function MobileNav() {
 
 export function Topbar() {
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-bg/85 px-4 backdrop-blur-md sm:px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-bg/85 px-3 backdrop-blur-md sm:gap-3 sm:px-6">
       <MobileNav />
       <Link href={routes.overview} className="lg:hidden" aria-label="Strata Compute">
         <LogoMark size={20} />
@@ -88,7 +95,7 @@ export function Topbar() {
         <Breadcrumb />
       </div>
 
-      <div className="ml-auto flex items-center gap-3">
+      <div className="ml-auto flex min-w-0 items-center gap-2 sm:gap-3">
         <button
           type="button"
           onClick={openCommandMenu}

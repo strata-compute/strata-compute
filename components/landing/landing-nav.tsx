@@ -21,14 +21,14 @@ function OpenAppButton({
 }) {
   return (
     <Link
-      href={routes.app}
+      href={routes.terminal}
       onClick={onClick}
       className={cn(
         "inline-flex h-9 items-center gap-1.5 rounded-md bg-green px-4 text-[13px] font-semibold text-on-accent transition-colors duration-150 hover:bg-green-bright",
         className,
       )}
     >
-      Open App
+      Open Terminal
       <ArrowRight className="size-3.5" />
     </Link>
   );

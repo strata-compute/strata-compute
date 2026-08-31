@@ -12,7 +12,7 @@ const ACCENT_NODE = "computation";
 const PRINCIPLES = [
   {
     label: "Computation, not presentation",
-    copy: "The score is produced by a backend engine on a fixed cadence. The application renders what the engine has already computed — it never derives a number on the client.",
+    copy: "Scores are produced by a backend engine on a fixed cadence and persisted before they are served. Two readers asking the same question in the same second get the same answer, because neither of them computed it.",
   },
   {
     label: "Deterministic by design",
@@ -20,7 +20,7 @@ const PRINCIPLES = [
   },
   {
     label: "Observable at every stage",
-    copy: "Ingestion, normalization, computation and delivery report independently, so a degraded venue narrows coverage instead of quietly distorting a score.",
+    copy: "Ingestion, normalisation, computation and delivery report independently. A provider that stops answering narrows coverage and says so — it never becomes a substituted number, and a market Strata cannot measure is reported as unmeasured.",
   },
 ];
 
@@ -36,7 +36,7 @@ export function InfrastructureSection() {
             Not just display.
           </>
         }
-        description="Strata ingests external market data, normalizes different data structures and computes comparable market intelligence before anything reaches the interface."
+        description="Providers are read on their own cadence, normalised onto one clock and one symbology, and computed by a backend engine before anything reaches a screen. The interface renders what the engine already decided; it never computes a number of its own."
         action={
           <Button asChild variant="secondary" className="h-11 px-5 text-[14px]">
             <Link href={routes.compute}>

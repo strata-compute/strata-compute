@@ -32,10 +32,10 @@ export default function NotFound() {
           Back to strata.compute
         </Link>
         <Link
-          href={routes.app}
+          href={routes.terminal}
           className="rounded-md bg-green px-4 py-2 text-[13px] font-semibold text-on-accent transition-colors hover:bg-green-bright"
         >
-          Launch App
+          Open Terminal
         </Link>
       </div>
     </main>

@@ -15,6 +15,7 @@ import { ScorePreview } from "@/components/landing/score-preview";
 import { ArenaPreview } from "@/components/landing/arena-preview";
 import { SignalPreview } from "@/components/landing/signal-preview";
 import { MarketCategories } from "@/components/landing/market-categories";
+import { ArchitectureSection } from "@/components/landing/architecture-section";
 import { InfrastructureSection } from "@/components/landing/infrastructure-section";
 import { FinalCTA } from "@/components/landing/final-cta";
 

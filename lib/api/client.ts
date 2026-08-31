@@ -91,7 +91,21 @@ export async function apiRequest<T>(
   path: string,
   options: RequestOptions = {},
 ): Promise<ApiResult<T>> {
-  const { timeoutMs = 8000, revalidate, signal } = options;
+  /**
+   * Twelve seconds, not eight.
+   *
+   * Every call here is server-side — pages render on the server and the
+   * browser only ever talks to same-origin route handlers — so this bounds a
+   * render, not a click. Eight seconds was too tight against a cold path
+   * measured at 7.75s, and the result was the worst possible failure: a
+   * healthy backend rendering as "data unavailable", which is indistinguishable
+   * from an outage and is not true.
+   *
+   * The margin exists because the API and its database currently sit in
+   * different regions. Co-locating them is the real fix; this stops a slow
+   * round trip from being reported as missing data in the meantime.
+   */
+  const { timeoutMs = 12_000, revalidate, signal } = options;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 

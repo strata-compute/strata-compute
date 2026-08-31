@@ -18,10 +18,10 @@ export function LandingFooter() {
               The computation layer for modern markets.
             </p>
             <Link
-              href={routes.app}
+              href={routes.terminal}
               className="group mt-6 inline-flex items-center gap-1.5 text-[13px] text-text transition-colors hover:text-green-ink"
             >
-              Open App
+              Open Terminal
               <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>

@@ -92,8 +92,8 @@ export default function PlatformPage() {
         actions={
           <>
             <Button asChild variant="primary" className="h-11 px-5 text-[14px]">
-              <Link href={routes.app}>
-                Open App
+              <Link href={routes.terminal}>
+                Open Terminal
                 <ArrowRight className="size-4" />
               </Link>
             </Button>

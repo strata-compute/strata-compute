@@ -1,19 +1,19 @@
 /**
  * Single source of truth for every internal URL.
  *
- * The public landing page lives at `/`; the application console is mounted
- * under `/app`. Nothing should hardcode a path — import from here so the mount
- * point can move again without touching components.
+ * The public landing page lives at `/`; the product — the Terminal — is
+ * mounted under `/terminal`. Nothing hardcodes a path: importing from here is
+ * what let the mount point move from `/app` without touching a component.
  */
-export const APP_BASE = "/app";
+export const APP_BASE = "/terminal";
 
 export const routes = {
   landing: "/",
   /** Marketing pages — the public story, not the product. */
   about: "/about",
   platform: "/platform",
-  /** Entry point for the console — redirects to the overview. */
-  app: APP_BASE,
+  /** Entry point for the Terminal — it redirects to the overview. */
+  terminal: APP_BASE,
   overview: `${APP_BASE}/overview`,
   arena: `${APP_BASE}/arena`,
   rankings: `${APP_BASE}/rankings`,

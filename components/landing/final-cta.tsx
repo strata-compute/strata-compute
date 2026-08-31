@@ -26,8 +26,8 @@ export function FinalCTA() {
         <Reveal delay={120}>
           <div className="mt-10 flex justify-center">
             <Button asChild variant="primary" className="h-12 px-7 text-[15px]">
-              <Link href={routes.app}>
-                Launch Strata
+              <Link href={routes.terminal}>
+                Open Terminal
                 <ArrowRight className="size-4" />
               </Link>
             </Button>

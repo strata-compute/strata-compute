@@ -82,7 +82,7 @@ export function ProblemSection() {
       <SectionHeader
         eyebrow="The problem"
         title="Market data is fragmented."
-        description="Stocks, crypto and onchain markets generate different forms of data — measured differently, settled differently, reported on different clocks."
+        description="A tokenised equity, a crypto major and an onchain pool each report a different shape of truth — different venues, different settlement, different clocks. Comparing them by eye is guesswork, and comparing them by raw price is worse: it compares units that were never the same."
       />
 
       <div className="mt-16 grid gap-px border border-border bg-border sm:grid-cols-3">

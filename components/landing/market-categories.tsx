@@ -19,7 +19,7 @@ export function MarketCategories() {
             Multiple markets.
           </>
         }
-        description="The same five modules, the same weights and the same normalisation run against all of it — which is what makes the output comparable."
+        description="The same seven components, the same published weights and the same normalisation run against all three — which is the only reason a score means the same thing in each. Tokenised equities are Robinhood Stock Tokens, read from Robinhood Chain."
       />
 
       <div className="mt-16">

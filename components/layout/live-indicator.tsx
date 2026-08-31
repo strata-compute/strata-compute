@@ -75,8 +75,8 @@ export function LiveIndicator({
       </span>
       {showClock ? (
         <>
-          <span className="h-3 w-px bg-border" aria-hidden />
-          <span className="font-mono text-[11.5px] tabular-nums text-muted">
+          <span className="hidden h-3 w-px bg-border sm:block" aria-hidden />
+          <span className="hidden font-mono text-[11.5px] tabular-nums text-muted sm:inline">
             {clock}
             <span className="ml-1 text-faint">UTC</span>
           </span>
