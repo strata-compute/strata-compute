@@ -59,8 +59,7 @@ plausible-looking number.
 │   ├── src/        api, providers, compute, intelligence, database, jobs
 │   ├── migrations/ forward-only, applied explicitly
 │   ├── scripts/    migrate, verify:schema, verify:database, recovery
-│   └── test/       255 tests, node:test
-└── logoreferensi/  brand package — mark, X header and avatars
+    └── test/       255 tests, node:test
 ```
 
 The backend lives in [`server/`](server/README.md) as a separate service, with
