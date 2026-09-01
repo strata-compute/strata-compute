@@ -37,13 +37,18 @@ export function getPool(): pg.Pool | null {
      * A ceiling on any single statement.
      *
      * Without one, a query that plans badly holds its connection until it
-     * finishes. That is exactly how this pool was starved: a handful of reads
-     * running for fifty seconds each, while every other request queued for a
-     * connection and timed out at five. Eight seconds is far above a healthy
-     * query here and far below the point where one read can take the service
-     * down with it.
+     * finishes, and a handful of fifty-second reads starved this pool
+     * completely.
+     *
+     * Twenty-five seconds, not eight. Eight was below the real cost of the
+     * intelligence read on this instance — measured at 12.7s for 58 rows, with
+     * an optimal plan; the free-tier disk is simply that slow — so the query
+     * was killed every single time and the cache it was meant to fill never
+     * populated. A timeout set under the work it is guarding does not protect
+     * the service, it guarantees the failure. The cache now serves stale data
+     * while refreshing, so at most one slow read is in flight per key.
      */
-    statement_timeout: 8_000,
+    statement_timeout: 25_000,
     // a managed pooler recycles connections; do not hold one forever
     maxLifetimeSeconds: 1_800,
   });
