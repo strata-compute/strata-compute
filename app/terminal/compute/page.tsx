@@ -236,7 +236,7 @@ export default async function ComputePage() {
         <SectionHeading
           eyebrow="Stage 03"
           title="Computation modules"
-          description="Five modules read the same normalised inputs and never read each other. Their weights are published and fixed for the life of a scoring version."
+          description="Seven components read the same normalised inputs and never read each other. Their weights are published and fixed for the life of a scoring version."
         />
         <Card>
           <CardHeader>

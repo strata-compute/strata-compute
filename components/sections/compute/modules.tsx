@@ -6,7 +6,7 @@ import { COMPONENT_LABELS } from "@/components/data/intelligence";
 import { cn } from "@/lib/utils";
 import { Badge, Card, CardBody, CardHeader, CardTitle } from "@/components/ui/primitives";
 
-/** Weight allocation across the five modules, as one continuous bar. */
+/** Weight allocation across the seven components, as one continuous bar. */
 /**
  * The published weights, drawn from the engine.
  *

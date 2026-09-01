@@ -165,7 +165,7 @@ export const INFRASTRUCTURE: InfraNode[] = [
   {
     id: "computation",
     label: "COMPUTATION",
-    detail: "Five modules score every market on identical normalised inputs.",
+    detail: "Seven components score every market on identical normalised inputs.",
     kind: "core",
   },
   {

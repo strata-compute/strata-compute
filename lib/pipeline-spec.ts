@@ -84,7 +84,7 @@ export const PIPELINE_STAGES: PipelineStage[] = [
     label: "Computation",
     kind: "process",
     description:
-      "Five independent modules score every market on the same normalised inputs. Modules never read each other.",
+      "Seven independent components score every market on the same normalised inputs. Components never read each other.",
     detail: [
       "Momentum — multi-window rate-of-change against volatility bands",
       "Volume — notional versus rolling median, venue-quality weighted",

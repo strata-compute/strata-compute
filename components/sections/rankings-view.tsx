@@ -21,7 +21,7 @@ const CLASS_TABS: { value: ClassTab; label: string }[] = [
 ];
 
 const FILTERS: { value: SortKey; label: string; hint: string }[] = [
-  { value: "score", label: "Score", hint: "Composite Strata Score, all five factors weighted." },
+  { value: "score", label: "Score", hint: "Composite Strata Score, all seven components weighted." },
   { value: "momentum", label: "Momentum", hint: "Multi-window rate-of-change, volatility-normalised." },
   { value: "volume24h", label: "Volume", hint: "24h traded notional, venue-quality weighted." },
   { value: "activity", label: "Activity", hint: "Participant breadth, order count and unique wallets." },

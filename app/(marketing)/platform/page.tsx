@@ -29,7 +29,7 @@ const LAYERS = [
   {
     id: "computation",
     label: "Computation",
-    copy: "Five modules score every covered market on identical normalised inputs. No module reads another module's output, so a fault degrades one factor rather than the composite.",
+    copy: "Seven components score every covered market on identical normalised inputs. No component reads another's output, so a fault degrades one component rather than the composite.",
     points: ["Momentum", "Volume", "Activity", "Liquidity", "Market strength"],
     accent: true,
   },
@@ -85,7 +85,7 @@ export default function PlatformPage() {
           <p>
             Strata Compute is a backend computation engine with an interface
             attached. Data enters from four domains, resolves onto one schema,
-            is scored by five independent modules, and is served as structured
+            is scored by seven independent components, and is served as structured
             intelligence.
           </p>
         }

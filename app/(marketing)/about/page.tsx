@@ -19,7 +19,7 @@ const BUILDING = [
   },
   {
     title: "One comparable measure",
-    copy: "The Strata Score reduces five independently computed factors to a single number that means the same thing in every market it describes.",
+    copy: "The Strata Score reduces seven independently computed components to a single number that means the same thing in every market it describes.",
   },
   {
     title: "A programmatic surface",
