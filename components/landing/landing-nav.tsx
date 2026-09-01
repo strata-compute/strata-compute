@@ -49,10 +49,13 @@ export function LandingNav() {
   return (
     <header
       className={cn(
-        // max-w-[100vw]: a fixed box with inset-x-0 still grows when its
-        // min-content is wider than the viewport, and then the page scrolls
-        // sideways. This bounds the bar itself rather than its contents.
-        "fixed inset-x-0 top-0 z-50 max-w-[100vw] transition-colors duration-300",
+        // overflow-x-clip, not max-w-[100vw]: a fixed box with inset-x-0 still
+        // grows when its min-content is wider, and 100vw is the wrong bound
+        // because it includes the scrollbar — on a page that scrolls
+        // vertically that is itself several pixels of overflow. Clip makes the
+        // bar incapable of being a horizontal scroll source, and the mobile
+        // menu is portaled to the body so nothing inside it is clipped.
+        "fixed inset-x-0 top-0 z-50 overflow-x-clip transition-colors duration-300",
         scrolled
           ? "border-b border-border bg-bg/80 backdrop-blur-xl"
           : "border-b border-transparent bg-transparent",
