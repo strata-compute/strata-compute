@@ -24,7 +24,7 @@ function OpenAppButton({
       href={routes.terminal}
       onClick={onClick}
       className={cn(
-        "inline-flex h-9 items-center gap-1.5 rounded-md bg-green px-4 text-[13px] font-semibold text-on-accent transition-colors duration-150 hover:bg-green-bright",
+        "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md bg-green px-3 text-[13px] font-semibold text-on-accent transition-colors duration-150 hover:bg-green-bright sm:px-4",
         className,
       )}
     >
@@ -59,8 +59,8 @@ export function LandingNav() {
           below md — so below md it is 40px of nothing, and with the longer
           "Open Terminal" label that was enough to push the bar past a 360px
           viewport. */}
-      <div className="mx-auto flex h-16 w-full max-w-[1240px] items-center gap-4 px-4 sm:px-8 md:gap-10">
-        <Link href={routes.landing} aria-label="Strata Compute" className="shrink-0">
+      <div className="mx-auto flex h-16 w-full max-w-full items-center gap-4 px-4 sm:px-8 md:max-w-[1240px] md:gap-10">
+        <Link href={routes.landing} aria-label="Strata Compute" className="min-w-0 shrink">
           <Logo />
         </Link>
 
