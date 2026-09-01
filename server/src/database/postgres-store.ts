@@ -325,9 +325,14 @@ export class PostgresStore implements StrataStore {
   // ---- read model --------------------------------------------------------
 
   /**
-   * DISTINCT ON is the cheapest way to take the newest row per asset from
-   * each time-series table; every one of these lateral sources is backed by
-   * an (asset_id, timestamp DESC) index.
+   * The newest row per asset from each time-series table.
+   *
+   * These were DISTINCT ON, which is correct but leaves the planner free to
+   * seq-scan and sort the whole table. Under load that is what it chose, and a
+   * sort of rows this wide spilled to disk and held pool connections for tens
+   * of seconds — which is what made the site flicker between live and
+   * unavailable. A LATERAL lookup is one index seek per asset and cannot
+   * degrade that way.
    */
   private latestRowsQuery(where: string): string {
     return `
@@ -335,28 +340,40 @@ export class PostgresStore implements StrataStore {
         SELECT * FROM assets ${where}
       ),
       latest_price AS (
-        SELECT DISTINCT ON (asset_id) *
-        FROM asset_prices
-        WHERE asset_id IN (SELECT id FROM scoped)
-        ORDER BY asset_id, timestamp DESC
+        SELECT r.* FROM scoped s
+        CROSS JOIN LATERAL (
+          SELECT * FROM asset_prices
+           WHERE asset_id = s.id
+           ORDER BY timestamp DESC
+           LIMIT 1
+        ) r
       ),
       latest_metrics AS (
-        SELECT DISTINCT ON (asset_id) *
-        FROM market_metrics
-        WHERE asset_id IN (SELECT id FROM scoped)
-        ORDER BY asset_id, timestamp DESC
+        SELECT r.* FROM scoped s
+        CROSS JOIN LATERAL (
+          SELECT * FROM market_metrics
+           WHERE asset_id = s.id
+           ORDER BY timestamp DESC
+           LIMIT 1
+        ) r
       ),
       latest_score AS (
-        SELECT DISTINCT ON (asset_id) *
-        FROM strata_scores
-        WHERE asset_id IN (SELECT id FROM scoped)
-        ORDER BY asset_id, timestamp DESC
+        SELECT r.* FROM scoped s
+        CROSS JOIN LATERAL (
+          SELECT * FROM strata_scores
+           WHERE asset_id = s.id
+           ORDER BY timestamp DESC
+           LIMIT 1
+        ) r
       ),
       latest_snapshot AS (
-        SELECT DISTINCT ON (asset_id) *
-        FROM market_snapshots
-        WHERE asset_id IN (SELECT id FROM scoped)
-        ORDER BY asset_id, timestamp DESC
+        SELECT r.* FROM scoped s
+        CROSS JOIN LATERAL (
+          SELECT * FROM market_snapshots
+           WHERE asset_id = s.id
+           ORDER BY timestamp DESC
+           LIMIT 1
+        ) r
       )
       SELECT
         a.*,
@@ -1332,13 +1349,22 @@ export class PostgresStore implements StrataStore {
     if (assets.length === 0) return [];
     const byId = new Map(assets.map((a) => [a.id, a]));
 
-    // one row per asset, resolved server-side rather than by fetching all
-    // history and discarding most of it
+    // One row per asset, via a lateral lookup rather than DISTINCT ON.
+    //
+    // DISTINCT ON reads correctly but plans badly here: with = ANY over the
+    // whole table the planner is free to seq-scan and sort, and these rows
+    // carry a JSONB payload, so the sort spills to disk and the query ran for
+    // fifty seconds holding a pool connection. LATERAL cannot make that
+    // choice — it is one index lookup per asset, each returning a single row.
     const { rows } = await this.pool.query<IntelligenceRow>(
-      `SELECT DISTINCT ON (asset_id) *
-         FROM asset_intelligence
-        WHERE asset_id = ANY($1::uuid[])
-        ORDER BY asset_id, timestamp DESC`,
+      `SELECT i.*
+         FROM unnest($1::uuid[]) AS a(id)
+         CROSS JOIN LATERAL (
+           SELECT * FROM asset_intelligence
+            WHERE asset_id = a.id
+            ORDER BY timestamp DESC
+            LIMIT 1
+         ) i`,
       [assets.map((a) => a.id)],
     );
 

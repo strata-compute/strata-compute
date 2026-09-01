@@ -33,6 +33,17 @@ export function getPool(): pg.Pool | null {
      */
     connectionTimeoutMillis: 5_000,
     idleTimeoutMillis: 30_000,
+    /**
+     * A ceiling on any single statement.
+     *
+     * Without one, a query that plans badly holds its connection until it
+     * finishes. That is exactly how this pool was starved: a handful of reads
+     * running for fifty seconds each, while every other request queued for a
+     * connection and timed out at five. Eight seconds is far above a healthy
+     * query here and far below the point where one read can take the service
+     * down with it.
+     */
+    statement_timeout: 8_000,
     // a managed pooler recycles connections; do not hold one forever
     maxLifetimeSeconds: 1_800,
   });
