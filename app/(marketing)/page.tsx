@@ -29,10 +29,11 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Strata Compute — One computation layer. Every market.",
+    absolute: "Strata Compute — Every market on one scale",
   },
   description:
-    "Strata Compute turns fragmented market, stock, crypto and onchain data into one comparable intelligence layer: Strata Scores, rankings, signals and competitive arena data.",
+    "A computation and intelligence layer for tokenised equities, crypto and onchain markets. Seven components, published weights, one comparable measure of strength. Built on Robinhood Chain.",
+  alternates: { canonical: "/" },
 };
 
 /**
