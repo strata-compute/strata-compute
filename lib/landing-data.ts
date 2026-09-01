@@ -75,12 +75,21 @@ export const PIPELINE: PipelineStage[] = [
   },
 ];
 
-/** Throughput annotations on the connectors between pipeline stages. */
+/**
+ * Labels on the connectors between pipeline stages.
+ *
+ * These used to be throughput figures — "41 venues" against six providers,
+ * "2.4M rec/min" against nothing that counts records, "1s cadence" against a
+ * sixty-second job. They named quantities nobody measured, on a diagram where
+ * a number reads as a measurement.
+ *
+ * They now name what crosses each boundary, which is true and needs no meter.
+ */
 export const PIPELINE_LINKS = [
-  "41 venues",
-  "2.4M rec/min",
-  "5 modules",
-  "1s cadence",
+  "market feeds",
+  "one schema",
+  "seven components",
+  "one composite",
 ] as const;
 
 /* ---------------------------------------------------------------- score */
