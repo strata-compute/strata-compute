@@ -156,6 +156,13 @@ const schema = z.object({
   CACHE_DRIVER: z.enum(["memory", "none"]).default("memory"),
   CACHE_URL: z.string().optional(),
   CACHE_TTL_SECONDS: z.coerce.number().int().nonnegative().default(15),
+  /**
+   * Upstash Redis, optional. Present means the cache survives a restart;
+   * absent means it falls back to process memory, which is what shipped
+   * before and still works.
+   */
+  UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
 
   /** Background jobs are opt-in and slow by default. */
   JOBS_ENABLED: bool.default(false),
