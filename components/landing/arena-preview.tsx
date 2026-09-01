@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
+import { AssetLogo } from "@/components/data/asset-logo";
 import { Button } from "@/components/ui/button";
 import { SectionHeader, SectionShell, Reveal } from "@/components/landing/primitives";
 import { DataUnavailable, FreshnessBadge } from "@/components/data/data-state";
@@ -21,6 +22,7 @@ export interface ArenaPreviewEntry {
   rank: number;
   symbol: string;
   score: number;
+  logoUrl: string | null;
 }
 
 export function ArenaPreview({
@@ -88,6 +90,10 @@ export function ArenaPreview({
               <span className="w-8 font-mono text-[12px] tabular-nums text-faint">
                 {String(entry.rank).padStart(2, "0")}
               </span>
+              <AssetLogo
+                asset={{ symbol: entry.symbol, logoUrl: entry.logoUrl }}
+                size="sm"
+              />
               <span className="min-w-0 flex-1 text-[14px] font-medium tracking-tight text-text">
                 {entry.symbol}
               </span>

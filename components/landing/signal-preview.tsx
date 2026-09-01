@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
+import { AssetLogo } from "@/components/data/asset-logo";
 import { Button } from "@/components/ui/button";
 import { SectionHeader, SectionShell, Reveal } from "@/components/landing/primitives";
 import { DataUnavailable, formatAge } from "@/components/data/data-state";
@@ -19,6 +20,7 @@ import type { DataStatus } from "@/lib/data";
 export interface SignalPreviewRow {
   kind: string;
   symbol: string;
+  logoUrl: string | null;
   value: number;
   ageSeconds: number | null;
 }
@@ -118,9 +120,15 @@ export function SignalPreview({
               </span>
             </div>
 
-            <p className="mt-6 text-[20px] font-medium tracking-tight text-text">
-              {signal.symbol}
-            </p>
+            <div className="mt-6 flex items-center gap-2.5">
+              <AssetLogo
+                asset={{ symbol: signal.symbol, logoUrl: signal.logoUrl }}
+                size="sm"
+              />
+              <p className="text-[20px] font-medium tracking-tight text-text">
+                {signal.symbol}
+              </p>
+            </div>
             <p className="mt-1 font-mono text-[15px] tabular-nums text-muted">
               {signal.value.toFixed(2)}
             </p>

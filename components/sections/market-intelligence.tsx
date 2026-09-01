@@ -2,6 +2,7 @@ import * as React from "react";
 import Link from "next/link";
 import type { ApiEarlyMover, ApiMarketBreadth, ApiMarketRegime } from "@/lib/api";
 import { routes } from "@/lib/routes";
+import { AssetLogo } from "@/components/data/asset-logo";
 import { cn } from "@/lib/utils";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/primitives";
 import { DataUnavailable } from "@/components/data/data-state";
@@ -184,11 +185,18 @@ export function MarketBreadthPanel({
  * happens next.
  */
 export function EarlyMoversPanel({
+  logos,
   movers,
   reason,
   className,
 }: {
   movers: ApiEarlyMover[] | null;
+  /**
+   * Asset id → artwork. The early-mover payload carries no logo, and a ticker
+   * is not enough to identify an asset — symbols are unique only per asset
+   * type — so the caller supplies artwork keyed by the id both sides share.
+   */
+  logos?: Map<string, string | null>;
   reason?: string | null;
   className?: string;
 }) {
@@ -219,9 +227,13 @@ export function EarlyMoversPanel({
             <div className="flex items-center justify-between gap-3">
               <Link
                 href={routes.asset(mover.symbol)}
-                className="text-[13.5px] font-medium text-text transition-colors hover:text-green-ink"
+                className="flex min-w-0 items-center gap-2 text-[13.5px] font-medium text-text transition-colors hover:text-green-ink"
               >
-                {mover.symbol}
+                <AssetLogo
+                  asset={{ symbol: mover.symbol, logoUrl: logos?.get(mover.assetId) ?? null }}
+                  size="xs"
+                />
+                <span className="truncate">{mover.symbol}</span>
               </Link>
               <span className="flex items-center gap-2.5">
                 <StageBadge stage={mover.stage} />

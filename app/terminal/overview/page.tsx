@@ -51,6 +51,22 @@ export default async function OverviewPage() {
     loadEarlyMovers(6),
   ]);
 
+  /**
+   * Asset id → artwork, from the market rows this page already fetched.
+   *
+   * The early-mover payload carries no logo. Rather than have that panel
+   * invent one from the ticker — which is the one thing the logo system
+   * refuses to do — it borrows what the market response published for the
+   * same asset.
+   *
+   * Keyed by id, not symbol: the assets table is unique on (symbol, type),
+   * so a tokenised equity and a token may legitimately share a ticker, and a
+   * symbol-keyed lookup would eventually hand one of them the other's logo.
+   */
+  const logoByAssetId = new Map(
+    (markets.data ?? []).map((asset) => [asset.id, asset.logoUrl ?? null]),
+  );
+
   // "Highest computed strength" must actually be ordered by computed
   // strength. Unscored markets are excluded rather than sorted last: an asset
   // that could not be scored has no place in a ranking of scores at all.
@@ -171,7 +187,11 @@ export default async function OverviewPage() {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <MarketRegimePanel regime={regime.data} reason={regime.reason} />
           <MarketBreadthPanel breadth={breadth.data} reason={breadth.reason} />
-          <EarlyMoversPanel movers={earlyMovers.data} reason={earlyMovers.reason} />
+          <EarlyMoversPanel
+            movers={earlyMovers.data}
+            logos={logoByAssetId}
+            reason={earlyMovers.reason}
+          />
         </div>
       </section>
 

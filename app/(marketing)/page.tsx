@@ -93,12 +93,29 @@ export default async function LandingPage() {
         { label: "Classes", value: "—" },
       ];
 
+  /**
+   * Asset id -> artwork, built from the market rows already fetched above.
+   *
+   * Rankings and arena entries do not all carry `logoUrl`, and inventing one
+   * from a ticker is exactly what this project does not do — so the preview
+   * rows borrow the artwork the market response published for that same
+   * asset, and render a monogram when there is none.
+   *
+   * Keyed by id rather than symbol: the assets table is unique on
+   * (symbol, type), so a tokenised equity and a token may share a ticker and
+   * a symbol-keyed lookup would eventually pair one with the other's logo.
+   */
+  const logoByAssetId = new Map(
+    (markets.data ?? []).map((asset) => [asset.id, asset.logoUrl ?? null]),
+  );
+
   const scoreRows =
     rankings.data?.entries.slice(0, 5).map((entry) => ({
       rank: entry.rank,
       symbol: entry.symbol,
       market: entry.assetType.toUpperCase(),
       score: entry.score,
+      logoUrl: logoByAssetId.get(entry.assetId) ?? null,
     })) ?? [];
 
   const arenaEntries =
@@ -106,6 +123,7 @@ export default async function LandingPage() {
       rank: entry.rank,
       symbol: entry.symbol,
       score: entry.currentScore,
+      logoUrl: entry.logoUrl ?? logoByAssetId.get(entry.assetId) ?? null,
     })) ?? [];
 
   const now = Date.now();
@@ -115,6 +133,8 @@ export default async function LandingPage() {
       symbol: signal.symbol,
       value: signal.value,
       ageSeconds: Math.round((now - new Date(signal.timestamp).getTime()) / 1000),
+      // signals carry their own artwork; the map is the fallback
+      logoUrl: signal.logoUrl ?? logoByAssetId.get(signal.assetId) ?? null,
     })) ?? [];
 
   return (

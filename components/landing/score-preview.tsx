@@ -6,6 +6,7 @@ import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { SectionHeader, SectionShell, Reveal } from "@/components/landing/primitives";
+import { AssetLogo } from "@/components/data/asset-logo";
 import { DataUnavailable, FreshnessBadge } from "@/components/data/data-state";
 import type { DataStatus } from "@/lib/data";
 
@@ -23,6 +24,8 @@ export interface ScorePreviewRow {
   symbol: string;
   market: string;
   score: number;
+  /** Provider-published artwork, or null. Never guessed from the ticker. */
+  logoUrl: string | null;
 }
 
 export function ScorePreview({
@@ -91,10 +94,14 @@ export function ScorePreview({
               key={row.symbol}
               className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-b border-border/70 px-5 py-4 last:border-b-0 sm:gap-8"
             >
-              <span className="flex items-center gap-4">
+              <span className="flex items-center gap-3 sm:gap-4">
                 <span className="font-mono text-[12px] tabular-nums text-faint">
                   {String(row.rank).padStart(2, "0")}
                 </span>
+                <AssetLogo
+                  asset={{ symbol: row.symbol, logoUrl: row.logoUrl }}
+                  size="sm"
+                />
                 <span className="flex w-24 flex-col">
                   <span className="text-[14.5px] font-medium tracking-tight text-text">
                     {row.symbol}
