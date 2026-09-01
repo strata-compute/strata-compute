@@ -274,7 +274,10 @@ router.get("/markets", validateQuery(marketListQuery), async (_req, res) => {
 
 router.get("/stats", async (_req, res) => {
   const store = getStore();
-  const rows = await store.getLatestMarketRows({ limit: 1000 });
+  // the widest read in the API — a thousand rows to compute six numbers
+  const rows = await getCache().wrap("stats:rows", CACHE_TTL, () =>
+    store.getLatestMarketRows({ limit: 1000 }),
+  );
   const data = rows.map(toMarketDto);
 
   if (data.length === 0) {
@@ -450,15 +453,28 @@ router.get("/signals", validateQuery(signalQuery), async (_req, res) => {
   const q = query<z.infer<typeof signalQuery>>(res);
   const store = getStore();
 
-  const signals = await store.listSignals({
-    ...(q.type ? { signalType: q.type } : {}),
-    ...(q.assetType ? { assetType: q.assetType } : {}),
-    ...(q.assetId ? { assetId: q.assetId } : {}),
-    ...(q.sinceMinutes
-      ? { since: new Date(Date.now() - q.sinceMinutes * 60_000).toISOString() }
-      : {}),
-    limit: q.limit,
-  });
+  // Cached per filter combination. The key has to carry every parameter, or
+  // one caller's filtered feed would be served to another's.
+  const signalKey = [
+    "signals",
+    q.type ?? "all",
+    q.assetType ?? "all",
+    q.assetId ?? "all",
+    q.sinceMinutes ?? "any",
+    q.limit,
+  ].join(":");
+
+  const signals = await getCache().wrap(signalKey, CACHE_TTL, () =>
+    store.listSignals({
+      ...(q.type ? { signalType: q.type } : {}),
+      ...(q.assetType ? { assetType: q.assetType } : {}),
+      ...(q.assetId ? { assetId: q.assetId } : {}),
+      ...(q.sinceMinutes
+        ? { since: new Date(Date.now() - q.sinceMinutes * 60_000).toISOString() }
+        : {}),
+      limit: q.limit,
+    }),
+  );
 
   // expired signals are dropped, not flagged: a feed showing a two-hour-old
   // spike as current is worse than one showing nothing
@@ -527,8 +543,12 @@ router.get("/arena", async (_req, res) => {
     });
   }
 
-  const [view, history] = await Promise.all([getRoundView(), listRounds(10)]);
-  const identities = assetIndex(await store.listAssets());
+  const [view, history] = await getCache().wrap("arena:view", CACHE_TTL, () =>
+    Promise.all([getRoundView(), listRounds(10)]),
+  );
+  const identities = assetIndex(
+    await getCache().wrap("arena:assets", CACHE_TTL, () => store.listAssets()),
+  );
   return ok(
     res,
     {
