@@ -75,7 +75,7 @@ export function NumberedList({
   className?: string;
 }) {
   return (
-    <div className={cn("grid gap-px border border-border bg-border md:grid-cols-3", className)}>
+    <div className={cn("grid grid-cols-1 gap-px border border-border bg-border md:grid-cols-3", className)}>
       {items.map((item, i) => (
         <Reveal key={item.title} delay={i * 80} className="bg-bg p-6">
           <span className="font-mono text-[10px] tracking-[0.2em] text-green-ink">

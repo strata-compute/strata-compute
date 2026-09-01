@@ -48,7 +48,9 @@ export function Segmented<T extends string>({
       role="tablist"
       aria-label={ariaLabel}
       className={cn(
-        "inline-flex items-center gap-0.5 rounded-md border border-border bg-surface p-0.5",
+        // max-w-full + scroll: the row keeps its shape and scrolls itself
+          // rather than pushing the document sideways on a narrow screen
+          "inline-flex max-w-full items-center gap-0.5 overflow-x-auto rounded-md border border-border bg-surface p-0.5",
         className,
       )}
     >

@@ -72,7 +72,7 @@ export function WeightBar({
 
 export function ModuleGrid({ className }: { className?: string }) {
   return (
-    <div className={cn("grid gap-4 lg:grid-cols-2 xl:grid-cols-3", className)}>
+    <div className={cn("grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3", className)}>
       {COMPUTE_MODULES.map((module) => (
         <Card key={module.id} className="flex flex-col">
           <CardHeader>

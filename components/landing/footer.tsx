@@ -26,7 +26,7 @@ export function LandingFooter() {
             </Link>
           </div>
 
-          <div className="grid gap-x-16 gap-y-10 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-x-16 gap-y-10 sm:grid-cols-2">
             {FOOTER_GROUPS.map((group) => (
               <nav key={group.title} aria-label={group.title}>
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">

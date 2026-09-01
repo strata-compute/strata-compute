@@ -212,7 +212,7 @@ export default async function ComputePage() {
           title="Data sources"
           description="Four domains, one ingestion contract. Every record is stamped at the venue clock before it enters the pipeline."
         />
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {SOURCES.map((source) => (
             <Card key={source.id}>
               <CardHeader>
@@ -259,7 +259,7 @@ export default async function ComputePage() {
           title="Strata Score"
           description="The composite is a weighted sum — nothing more exotic. That is deliberate: a score you cannot reconstruct by hand is a score you cannot trust."
         />
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,340px)]">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,340px)]">
           <WorkedExample
             symbol={detail?.data?.asset.symbol ?? null}
             score={workedScore.data}
@@ -302,7 +302,7 @@ export default async function ComputePage() {
           title="Detection"
           description="Scores are compared against their own history. What has moved further than this asset usually moves, held long enough to mean it, and can be explained by the components underneath becomes an intelligence event."
         />
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
           <Card>
             <CardHeader>
               <CardTitle>What detection is running on</CardTitle>
@@ -369,7 +369,7 @@ export default async function ComputePage() {
           title="Where the score goes"
           description="Rankings, arena rounds and signals are three views onto one computation — not three separate products."
         />
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {[
             {
               href: routes.rankings,

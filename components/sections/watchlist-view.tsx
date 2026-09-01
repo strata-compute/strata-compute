@@ -195,7 +195,7 @@ export function WatchlistView() {
 
           return (
             <Card key={row.symbol}>
-              <CardBody className="grid gap-4 sm:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))_auto] sm:items-center">
+              <CardBody className="grid grid-cols-1 gap-4 sm:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))_auto] sm:items-center">
                 <Link
                   href={routes.asset(d.asset.symbol)}
                   className="flex min-w-0 items-center gap-3"

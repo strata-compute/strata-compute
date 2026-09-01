@@ -210,7 +210,7 @@ export default async function AssetDetailPage({
       <FreshnessBadge status={status} ageSeconds={ageSeconds} />
       <StaleNotice status={status} ageSeconds={ageSeconds} />
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="min-w-0 space-y-6">
           <Card>
             <CardHeader>

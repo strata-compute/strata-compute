@@ -259,7 +259,7 @@ export default function DocumentationPage() {
         </CardBody>
       </Card>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {CONCEPTS.map((section) => (
           <Prose key={section.id} section={section} />
         ))}
@@ -285,7 +285,7 @@ export default function DocumentationPage() {
         </ul>
       </Card>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {ENGINE.map((section) => (
           <Prose key={section.id} section={section} />
         ))}
@@ -318,7 +318,7 @@ export default function DocumentationPage() {
         </ul>
       </Card>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {SURFACES.map((surface) => (
           <Card key={surface.title}>
             <CardHeader>
@@ -351,7 +351,7 @@ export default function DocumentationPage() {
         </CardBody>
       </Card>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {METHODOLOGY.map((section) => (
           <Prose key={section.id} section={section} />
         ))}
@@ -399,7 +399,7 @@ export default function DocumentationPage() {
         <CardHeader>
           <CardTitle>Where to go next</CardTitle>
         </CardHeader>
-        <CardBody className="grid gap-3 sm:grid-cols-3">
+        <CardBody className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           {[
             { href: routes.compute, label: "The computation pipeline" },
             { href: routes.rankings, label: "Live rankings" },

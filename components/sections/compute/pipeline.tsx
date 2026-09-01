@@ -80,7 +80,7 @@ export function PipelineDiagram({ className }: { className?: string }) {
 
 export function StageDetails({ className }: { className?: string }) {
   return (
-    <div className={cn("grid gap-4 lg:grid-cols-2", className)}>
+    <div className={cn("grid grid-cols-1 gap-4 lg:grid-cols-2", className)}>
       {PIPELINE_STAGES.map((stage, index) => (
         <Card key={stage.id}>
           <CardHeader>

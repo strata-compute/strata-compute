@@ -102,7 +102,7 @@ export default function AboutPage() {
       </SectionShell>
 
       <SectionShell>
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-20">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-20">
           <SectionHeader
             eyebrow="Where it stands"
             title="Honest about the stage."

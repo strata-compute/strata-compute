@@ -110,7 +110,7 @@ export default async function OverviewPage() {
         />
 
         {stats.data ? (
-          <div className="grid gap-px border border-border bg-border sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-2 xl:grid-cols-4">
             {[
               {
                 label: "Assets tracked",
@@ -168,7 +168,7 @@ export default async function OverviewPage() {
           title="What the covered set is doing"
           description="Computed from the markets Strata scores — a reading of this set, not a claim about markets it does not cover."
         />
-        <div className="grid gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <MarketRegimePanel regime={regime.data} reason={regime.reason} />
           <MarketBreadthPanel breadth={breadth.data} reason={breadth.reason} />
           <EarlyMoversPanel movers={earlyMovers.data} reason={earlyMovers.reason} />
