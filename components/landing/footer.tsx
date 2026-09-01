@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { FOOTER_GROUPS } from "@/lib/landing-data";
 import { routes } from "@/lib/routes";
 import { Logo } from "@/components/layout/logo";
+import { SocialLinks } from "@/components/layout/social-links";
 
 export function LandingFooter() {
   return (
@@ -49,10 +50,14 @@ export function LandingFooter() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-[11px] text-faint">
-            © 2026 Strata Compute
-          </p>
+        <div className="mt-14 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="-ml-1.5 flex items-center gap-3">
+            <SocialLinks />
+            <span className="h-3 w-px bg-border" aria-hidden />
+            <p className="font-mono text-[11px] text-faint">
+              © 2026 Strata Compute
+            </p>
+          </div>
           <p className="font-mono text-[11px] text-faint">
             Live market data · sourced, timestamped, computed
           </p>

@@ -35,6 +35,17 @@ export const routes = {
 } as const;
 
 /**
+ * Outbound accounts.
+ *
+ * Absolute URLs, so they live apart from `routes` — everything in there is a path
+ * this app owns and can route to. These leave the site.
+ */
+export const external = {
+  x: "https://x.com/StrataCompute",
+  github: "https://github.com/strata-compute/strata-compute",
+} as const;
+
+/**
  * There is deliberately no anchor map here.
  *
  * Every item that represents a real product section routes to that section's

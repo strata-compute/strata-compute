@@ -41,6 +41,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: "@StrataCompute",
+    creator: "@StrataCompute",
     title: "Strata Compute — Every market on one scale",
     description:
       "A computation and intelligence layer for tokenised equities, crypto and onchain markets.",

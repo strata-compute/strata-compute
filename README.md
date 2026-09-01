@@ -1,24 +1,73 @@
-# Strata Compute
+<p align="center">
+  <img src=".github/banner.png" alt="Strata Compute — every market on one scale" width="100%">
+</p>
 
-**One computation layer. Every market.**
+<p align="center">
+  <a href="https://stratacompute.app"><b>stratacompute.app</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://stratacompute.app/terminal">Terminal</a>
+  &nbsp;·&nbsp;
+  <a href="https://stratacompute.app/docs">Methodology</a>
+  &nbsp;·&nbsp;
+  <a href="https://stratacompute.app/status">Status</a>
+  &nbsp;·&nbsp;
+  <a href="https://x.com/StrataCompute">@StrataCompute</a>
+</p>
+
+<p align="center">
+  <img alt="Next.js 15" src="https://img.shields.io/badge/Next.js-15-080A09?style=flat-square&labelColor=080A09&color=202621">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-080A09?style=flat-square&labelColor=080A09&color=202621">
+  <img alt="Node" src="https://img.shields.io/badge/Node-24-080A09?style=flat-square&labelColor=080A09&color=202621">
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-17-080A09?style=flat-square&labelColor=080A09&color=202621">
+  <img alt="Tests" src="https://img.shields.io/badge/tests-255-080A09?style=flat-square&labelColor=080A09&color=CCFF00">
+</p>
+
+---
+
+## What this is
+
+Tokenised equities, crypto and onchain markets are quoted in units that cannot
+be compared: a share price, a token price and a wallet count do not sit on the
+same axis. Strata normalises all three onto one schema and computes **one
+comparable measure of strength** — seven components, published weights, the
+same arithmetic for every asset class.
 
 A Next.js frontend, a standalone Node/Express backend and a Supabase
 PostgreSQL database. Real market providers, a versioned compute engine, the
 Strata Score, an intelligence engine and background jobs. There is no mock
-data path in production — the switch was removed rather than defaulted off.
+data path in production — the switch was removed rather than defaulted off,
+so a provider failure surfaces as an explicit unavailable state and never as a
+plausible-looking number.
 
 | Route | What it is |
 | --- | --- |
 | `/` | Public landing page — positioning and the computation story |
 | `/about` · `/platform` | Why Strata exists, and how the platform is put together |
 | `/docs` · `/status` | Public methodology and pipeline health |
-| `/app/*` | The console — Overview, Arena, Rankings, Assets, Signals, Activity, Watchlist, Compare, Compute |
+| `/terminal/*` | The Terminal — Overview, Arena, Rankings, Assets, Signals, Activity, Watchlist, Compare, Compute |
 
-The backend lives in [`server/`](server/README.md) as a separate service,
-with its own README covering the pipeline, scoring and intelligence engines.
+## Repository
 
-`/app` redirects to `/app/overview`, so "Launch App" can point at the short
-URL. The landing page is marketing only; every feature CTA routes into the
+```
+.
+├── app/            Next.js App Router — (marketing) and terminal/
+├── components/     landing, layout, ui, data, charts, sections
+├── lib/            types, routes, API client, server-only resolvers
+├── public/         static assets
+├── scripts/        frontend tooling
+├── server/         the Strata API — its own service, its own package.json
+│   ├── src/        api, providers, compute, intelligence, database, jobs
+│   ├── migrations/ forward-only, applied explicitly
+│   ├── scripts/    migrate, verify:schema, verify:database, recovery
+│   └── test/       255 tests, node:test
+└── logoreferensi/  brand package — mark, X header and avatars
+```
+
+The backend lives in [`server/`](server/README.md) as a separate service, with
+its own README covering the pipeline, scoring and intelligence engines.
+
+`/terminal` redirects to `/terminal/overview`, so "Open Terminal" can point at
+the short URL. The landing page is marketing only; every feature CTA routes into the
 matching console page.
 
 ```bash
@@ -83,9 +132,9 @@ app/
     platform/            /platform — how the platform is built
     docs/                /docs — methodology and API surface
     status/              /status — pipeline health
-  app/                   the console, mounted at /app
+  terminal/              the Terminal, mounted at /terminal
     layout.tsx           AppShell (sidebar, topbar, command palette)
-    overview/            /app/overview     arena/         Arena
+    overview/            /terminal/…       arena/         Arena
     rankings/            Rankings          assets/        Assets + [symbol]
     signals/             Signals           compute/       Compute
     settings/            Settings          loading.tsx per route, error, not-found
@@ -114,10 +163,10 @@ lib/
 ```
 
 **Routing.** `lib/routes.ts` is the single source of truth for internal URLs.
-The console is mounted at `APP_BASE = "/app"`; changing that constant moves the
+The Terminal is mounted at `APP_BASE = "/terminal"`; changing that constant moves the
 whole console without touching a component. `/docs` and `/status` sit outside
 that base because they are public pages, and the console sidebar links out to
-them. The `/app` → `/app/overview` redirect lives in `next.config.mjs`, so it
+them. The `/terminal` → `/terminal/overview` redirect lives in `next.config.mjs`, so it
 resolves before a render happens.
 
 Two rules hold the structure together:
@@ -306,14 +355,14 @@ Section headlines are set in caps to match the hero statement. Long-form pages
 (`/docs`, `/status`) stay in sentence case.
 
 **Navigation.** The marketing navbar is deliberately short — About, Platform,
-Docs, and `Open App` as the strongest element. Feature navigation lives in the
+Docs, and `Open Terminal` as the strongest element. Feature navigation lives in the
 console sidebar, not here: the site explains the product, the app holds the
-tools. Every marketing section links into the matching `/app` page rather than
+tools. Every marketing section links into the matching `/terminal` page rather than
 reproducing it.
 
 Three pieces carry motion, and all three respect `prefers-reduced-motion`:
 
-- **Hero engine** — market rows enter, five modules scan, one score leaves.
+- **Hero engine** — market rows enter, four modules scan, one score leaves.
   Drawn as a schematic with hairline rails and travelling packets rather than a
   dashboard card, so it reads as the computation itself.
 - **Arena preview** — rows swap position on a timer. The rising row is given a
