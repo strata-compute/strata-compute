@@ -146,7 +146,7 @@ function LayerRow({ layer, index }: { layer: Layer; index: number }) {
 
 export function ArchitectureSection() {
   return (
-    <SectionShell id="architecture" bordered>
+    <SectionShell id="system" bordered>
       <SectionHeader
         eyebrow="System architecture"
         title="How a market becomes a number."

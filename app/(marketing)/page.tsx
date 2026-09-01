@@ -127,6 +127,7 @@ export default async function LandingPage() {
       <MarketTicker quotes={tickerQuotes} status={markets.status} />
       <ProblemSection />
       <ComputePipeline />
+      <ArchitectureSection />
       <ScorePreview
         rows={scoreRows}
         status={rankings.status}
