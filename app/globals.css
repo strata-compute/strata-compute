@@ -232,6 +232,19 @@
   }
 
   body {
+    /*
+     * No page may scroll sideways.
+     *
+     * The structural causes were fixed where they were found — unpinned grid
+     * tracks, a non-shrinking tab row, a fixed header wider than its own
+     * viewport. This is the guard behind them: `clip` stops horizontal
+     * scrolling without creating a scroll container, so `position: sticky`
+     * and the fixed header keep working. `hidden` would break both.
+     *
+     * Wide content still scrolls inside its own container — the data tables
+     * carry their own overflow-x-auto and are unaffected.
+     */
+    overflow-x: clip;
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sans);
