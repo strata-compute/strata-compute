@@ -13,6 +13,7 @@ import { runPipeline } from "../pipeline.ts";
 
 import { logger } from "../utils/logger.ts";
 import { scheduler } from "./scheduler.ts";
+import { pruneHistory } from "../database/retention.ts";
 import type { Job } from "./types.ts";
 
 /**
@@ -132,7 +133,25 @@ export const arenaRoundJob: Job = {
   },
 };
 
+/**
+ * Prunes stored history to the configured window.
+ *
+ * Runs hourly rather than daily. A daily job on a small database is a job that
+ * removes a day of growth in one burst, and the burst is exactly what the
+ * instance cannot absorb; hourly keeps each pass small enough to be
+ * unremarkable.
+ */
+export const retentionJob: Job = {
+  name: "retention",
+  description: "Removes stored history older than the configured window.",
+  intervalMs: 3_600_000,
+  async run() {
+    await pruneHistory();
+  },
+};
+
 export function registerJobs(): void {
+  scheduler.register(retentionJob);
   scheduler.register(ingestStockTokensJob);
   scheduler.register(ingestCryptoJob);
   scheduler.register(ingestStocksJob);
