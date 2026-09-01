@@ -7,6 +7,8 @@ import {
   listWinners,
 } from "../../arena/service.ts";
 import { arenaConfig } from "../../config/arena.ts";
+import { getCache } from "../../cache/index.ts";
+import { env } from "../../config/env.ts";
 import { getStore } from "../../database/index.ts";
 import { AppError } from "../../utils/errors.ts";
 import { params, query, validateParams, validateQuery } from "../middleware/validate.ts";
@@ -174,7 +176,10 @@ phase6Router.get("/compare", validateQuery(compareQuery), async (_req, res) => {
 
 phase6Router.get("/arena/current", async (_req, res) => {
   const store = getStore();
-  const current = await store.getCurrentArenaRound();
+  const cache = getCache();
+  const current = await cache.wrap("arena:current:round", env.CACHE_TTL_SECONDS, () =>
+    store.getCurrentArenaRound(),
+  );
 
   if (!current) {
     const config = arenaConfig();
@@ -185,8 +190,19 @@ phase6Router.get("/arena/current", async (_req, res) => {
     );
   }
 
-  const view = await getRoundView(current.roundNumber);
-  const identities = assetIndex(await store.listAssets());
+  // Cached together and keyed by round: a new round produces a new key, so
+  // the standings can never be served from the previous one.
+  const { view, identities } = await cache.wrap(
+    `arena:current:view:${current.roundNumber}`,
+    env.CACHE_TTL_SECONDS,
+    async () => {
+      const [roundView, assets] = await Promise.all([
+        getRoundView(current.roundNumber),
+        store.listAssets(),
+      ]);
+      return { view: roundView, identities: assetIndex(assets) };
+    },
+  );
 
   return ok(
     res,
