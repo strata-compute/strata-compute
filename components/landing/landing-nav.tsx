@@ -89,7 +89,12 @@ export function LandingNav() {
           })}
         </nav>
 
-        <div className="ml-auto flex items-center gap-2.5">
+        {/* min-w-0: a flex item defaults to min-width:auto, which is its
+            min-content — so this cluster refused to shrink and pushed the
+            fixed header past the viewport. body{overflow-x:clip} cannot
+            contain it, because a fixed box is positioned against the
+            viewport rather than the body. */}
+        <div className="ml-auto flex min-w-0 items-center gap-2 sm:gap-2.5">
           <ThemeToggle className="hidden sm:flex" />
           <OpenAppButton />
 
