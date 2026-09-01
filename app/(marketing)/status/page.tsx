@@ -114,7 +114,7 @@ export default async function StatusPage() {
                 tone={provider.status === "healthy" ? "green" : "red"}
                 pulse={provider.status === "healthy"}
               />
-              <span className="w-52 text-[13px] text-text">
+              <span className="w-full text-[13px] text-text sm:w-52">
                 {subsystemFor(name).label}
               </span>
               <span className="min-w-0 flex-1 text-[12.5px] text-muted">
@@ -141,7 +141,7 @@ export default async function StatusPage() {
         </CardHeader>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3.5">
           <StatusDot tone={health.database.connected ? "green" : "amber"} />
-          <span className="w-52 text-[13px] text-text">PostgreSQL</span>
+          <span className="w-full text-[13px] text-text sm:w-52">PostgreSQL</span>
           <span className="min-w-0 flex-1 text-[12.5px] text-muted">
             {health.database.detail ??
               (health.database.connected ? "Connected" : "Not connected")}
