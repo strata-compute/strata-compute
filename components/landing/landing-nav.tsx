@@ -55,7 +55,11 @@ export function LandingNav() {
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <div className="mx-auto flex h-16 w-full max-w-[1240px] items-center gap-10 px-5 sm:px-8">
+      {/* The 40px gap separates the logo from the nav links, which are hidden
+          below md — so below md it is 40px of nothing, and with the longer
+          "Open Terminal" label that was enough to push the bar past a 360px
+          viewport. */}
+      <div className="mx-auto flex h-16 w-full max-w-[1240px] items-center gap-4 px-4 sm:px-8 md:gap-10">
         <Link href={routes.landing} aria-label="Strata Compute" className="shrink-0">
           <Logo />
         </Link>
