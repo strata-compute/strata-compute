@@ -52,6 +52,19 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true },
   },
+  /**
+   * Domain ownership proofs.
+   *
+   * Declared here rather than as raw markup in the layout body so they travel
+   * with the rest of the metadata — a tag hand-written into <head> is the kind
+   * that disappears the next time the layout is refactored, and it disappears
+   * silently.
+   */
+  verification: {
+    other: {
+      "virtual-protocol-site-verification": "e747d327db971c9aedbc7d825932ea49",
+    },
+  },
 };
 
 export const viewport: Viewport = {
